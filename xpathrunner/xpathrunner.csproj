@@ -5,21 +5,19 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<PublishSingleFile>true</PublishSingleFile>
+	<PublishTrimmed>true</PublishTrimmed>
+	<TrimMode>partial</TrimMode>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cocona.Lite" Version="2.1.0" />
+    <PackageReference Include="Cocona.Lite" Version="2.1.0" IsTrimmable="false" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="jobOffers.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+	  <TrimmerRootDescriptor Include="TrimRoot.xml" />
   </ItemGroup>
 
 </Project>
