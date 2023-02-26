@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathy", "xpathy\xpathy.csproj", "{DA60546B-DC63-41BE-BE89-061F2D9874EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xpathy", "xpathy\xpathy.csproj", "{DA60546B-DC63-41BE-BE89-061F2D9874EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunner", "xpathrunner\xpathrunner.csproj", "{1372129D-DB4D-45E7-9A27-559FDF99D37C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xpathrunner", "xpathrunner\xpathrunner.csproj", "{1372129D-DB4D-45E7-9A27-559FDF99D37C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui", "xpathrunnerui\xpathrunnerui\xpathrunnerui.csproj", "{8EDCECB6-A687-40F2-A0F8-948B66A9BCE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.Android", "xpathrunnerui\xpathrunnerui.Android\xpathrunnerui.Android.csproj", "{C17B2368-D5D2-4D42-B525-0AF270AAB1B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.Desktop", "xpathrunnerui\xpathrunnerui.Desktop\xpathrunnerui.Desktop.csproj", "{B43EE018-D90D-440E-8756-0141EC2B14CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.iOS", "xpathrunnerui\xpathrunnerui.iOS\xpathrunnerui.iOS.csproj", "{AD00EE6D-2B40-4A5D-A393-11F5F0841730}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.Web", "xpathrunnerui\xpathrunnerui.Web\xpathrunnerui.Web.csproj", "{28B3C124-8B28-46C9-BDD9-70966A95B8DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +31,26 @@ Global
 		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDCECB6-A687-40F2-A0F8-948B66A9BCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDCECB6-A687-40F2-A0F8-948B66A9BCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDCECB6-A687-40F2-A0F8-948B66A9BCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDCECB6-A687-40F2-A0F8-948B66A9BCE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C17B2368-D5D2-4D42-B525-0AF270AAB1B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17B2368-D5D2-4D42-B525-0AF270AAB1B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17B2368-D5D2-4D42-B525-0AF270AAB1B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17B2368-D5D2-4D42-B525-0AF270AAB1B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B43EE018-D90D-440E-8756-0141EC2B14CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B43EE018-D90D-440E-8756-0141EC2B14CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B43EE018-D90D-440E-8756-0141EC2B14CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B43EE018-D90D-440E-8756-0141EC2B14CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD00EE6D-2B40-4A5D-A393-11F5F0841730}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD00EE6D-2B40-4A5D-A393-11F5F0841730}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD00EE6D-2B40-4A5D-A393-11F5F0841730}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD00EE6D-2B40-4A5D-A393-11F5F0841730}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B3C124-8B28-46C9-BDD9-70966A95B8DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B3C124-8B28-46C9-BDD9-70966A95B8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B3C124-8B28-46C9-BDD9-70966A95B8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B3C124-8B28-46C9-BDD9-70966A95B8DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

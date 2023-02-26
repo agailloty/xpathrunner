@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:xpathrunnerui.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="xpathrunnerui.Views.MainView"
+             Foreground="White"
+             Background="#171C2C">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <viewModels:MainViewModel />
+  </Design.DataContext>
+
+	<StackPanel>
+		<TextBlock Text="Xpath Runner" />
+		<Grid ColumnDefinitions="1*, 2*">
+			<StackPanel Grid.Column="0">
+				<TextBlock Text="Enter Xpath expression" />
+				<TextBox  />
+			</StackPanel>
+
+			<StackPanel Grid.Column="1">
+				<Button>Open HTML / XML file</Button>
+				<TextBox AcceptsReturn="True" TextWrapping="Wrap" />
+			</StackPanel>
+			
+		</Grid>
+	</StackPanel>
+</UserControl>
