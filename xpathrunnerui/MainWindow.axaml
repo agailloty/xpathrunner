@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="xpathrunnerui.MainWindow"
+        Title="XPATH Runner" Width="750" Height="680"
+		Icon="/Assets/html_tag.png"
+		WindowStartupLocation="CenterScreen">
+
+	<StackPanel Margin="50">
+		<Button Margin="0 0 0 20" ClickMode="Press" Click="PickFileHandler"> Open html file</Button>
+		<TextBox x:Name="txtFilePath" IsVisible="False" FontSize="15" />
+		<Grid Margin="0 20 0 20">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="3*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" FontSize="18" Text="Xpath expression"/>
+			<TextBox Grid.Column="1" x:Name="txtXpath" FontSize="15"/>
+		</Grid>
+		
+		<Button Margin="0 0 0 20" ClickMode="Press" Click="ValidateHandler" >Search</Button>
+
+		<Border Height="430">
+			<ScrollViewer>
+				<ListBox x:Name="lstResults" />
+			</ScrollViewer>
+		</Border>
+		
+	</StackPanel>
+</Window>

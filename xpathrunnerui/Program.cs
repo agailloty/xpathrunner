@@ -1,8 +1,7 @@
 ﻿using Avalonia;
-using Avalonia.ReactiveUI;
 using System;
 
-namespace xpathrunnerui.Desktop
+namespace xpathrunnerui
 {
     internal class Program
     {
@@ -17,7 +16,7 @@ namespace xpathrunnerui.Desktop
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .LogToTrace()
-                .UseReactiveUI();
+                .WithInterFont()
+                .LogToTrace();
     }
 }

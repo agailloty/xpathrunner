@@ -1,23 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<PublishSingleFile>true</PublishSingleFile>
+	
 	<PublishTrimmed>true</PublishTrimmed>
 	<TrimMode>partial</TrimMode>
+	<PublishAot>true</PublishAot>
+    <OptimizationPreference>Size</OptimizationPreference>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Cocona.Lite" Version="2.1.0" IsTrimmable="false" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-	  <TrimmerRootDescriptor Include="TrimRoot.xml" />
   </ItemGroup>
 
 </Project>
