@@ -1,12 +1,11 @@
-name: Build and Release .NET Projects
-
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+    workflow_dispatch:
+
+name: Build and Release .NET Projects
 
 jobs:
   build_and_release:
