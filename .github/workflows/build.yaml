@@ -1,0 +1,78 @@
+name: Build and Release .NET Projects
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x' # Set the .NET version you need
+
+    - name: Build and Publish xpathrunnerui for ${{ matrix.os }}
+      run: |
+        cd xpathrunnerui
+        dotnet publish -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true
+        mkdir -p ../release/${{ matrix.os }}/xpathrunnerui
+        cp -r bin/Release/net8.0/${{ matrix.os }}/publish/* ../release/${{ matrix.os }}/xpathrunnerui/
+      shell: bash
+
+    - name: Build and Publish xpathrunner for ${{ matrix.os }}
+      run: |
+        cd xpathrunner
+        dotnet publish -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true
+        mkdir -p ../release/${{ matrix.os }}/xpathrunner
+        cp -r bin/Release/net8.0/${{ matrix.os }}/publish/* ../release/${{ matrix.os }}/xpathrunner/
+      shell: bash
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        body: |
+          Changes in this release:
+          - Add single-file self-contained Avalonia app and command line app for ${{ matrix.os }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset xpathrunnerui
+      id: upload-release-asset-xpathrunnerui
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/${{ matrix.os }}/xpathrunnerui
+        asset_name: xpathrunnerui_${{ matrix.os }}.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Asset xpathrunner
+      id: upload-release-asset-xpathrunner
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: release/${{ matrix.os }}/xpathrunner
+        asset_name: xpathrunner_${{ matrix.os }}.zip
+        asset_content_type: application/zip
