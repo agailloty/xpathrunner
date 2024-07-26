@@ -1,9 +1,10 @@
-﻿using Avalonia;
-using System;
+﻿using System;
 
-namespace xpathrunnerui
+using Avalonia;
+
+namespace xpathrunnerui.Desktop
 {
-    internal class Program
+    internal sealed class Program
     {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
