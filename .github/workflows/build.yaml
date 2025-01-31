@@ -1,77 +1,52 @@
-on:
-    push:
-        branches: [main, master]
-    pull_request:
-        branches: [main, master]
-    workflow_dispatch:
+name: Publish .NET Application
 
-name: Build and Release .NET Projects
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  build_and_release:
-    runs-on: ubuntu-latest
-
+  build:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [win-x64, linux-x64, osx-x64]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x' # Set the .NET version you need
+        dotnet-version: 8.0.x
 
-    - name: Build and Publish xpathrunnerui for ${{ matrix.os }}
-      run: |
-        cd xpathrunnerui
-        dotnet publish -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true
-        mkdir -p ../release/${{ matrix.os }}/xpathrunnerui
-        cp -r bin/Release/net8.0/${{ matrix.os }}/publish/* ../release/${{ matrix.os }}/xpathrunnerui/
-      shell: bash
+    - name: Install dependencies
+      run: dotnet restore
 
-    - name: Build and Publish xpathrunner for ${{ matrix.os }}
-      run: |
-        cd xpathrunner
-        dotnet publish -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true
-        mkdir -p ../release/${{ matrix.os }}/xpathrunner
-        cp -r bin/Release/net8.0/${{ matrix.os }}/publish/* ../release/${{ matrix.os }}/xpathrunner/
-      shell: bash
+    - name: Build
+      run: dotnet publish -c Release --self-contained -p:PublishTrimmed=true -o ./publish
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Archive build (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: tar -czvf xpathrunner-ubuntu.tar.gz -C ./publish .
+
+    - name: Archive build (macOS)
+      if: matrix.os == 'macos-latest'
+      run: tar -czvf xpathrunner-macos.tar.gz -C ./publish .
+
+    - name: Archive build (Windows)
+      if: matrix.os == 'windows-latest'
+      run: Compress-Archive -Path ./publish/* -DestinationPath xpathrunner-windows.zip
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
       with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        body: |
-          Changes in this release:
-          - Add single-file self-contained Avalonia app and command line app for ${{ matrix.os }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset xpathrunnerui
-      id: upload-release-asset-xpathrunnerui
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/${{ matrix.os }}/xpathrunnerui
-        asset_name: xpathrunnerui_${{ matrix.os }}.zip
-        asset_content_type: application/zip
-
-    - name: Upload Release Asset xpathrunner
-      id: upload-release-asset-xpathrunner
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: release/${{ matrix.os }}/xpathrunner
-        asset_name: xpathrunner_${{ matrix.os }}.zip
-        asset_content_type: application/zip
+        name: ${{ matrix.os }}-build
+        path: |
+          xpathrunner-ubuntu.tar.gz
+          xpathrunner-macos.tar.gz
+          xpathrunner-windows.zip
