@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui", "xpathrunne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.Desktop", "xpathrunnerui\xpathrunnerui.Desktop\xpathrunnerui.Desktop.csproj", "{5D984B3B-FAF0-4B02-BCD4-D2809826C08E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui.Browser", "xpathrunnerui\xpathrunnerui.Browser\xpathrunnerui.Browser.csproj", "{22994BE7-CF95-40F5-9AF7-03AE55A7FBE3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{5D984B3B-FAF0-4B02-BCD4-D2809826C08E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D984B3B-FAF0-4B02-BCD4-D2809826C08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D984B3B-FAF0-4B02-BCD4-D2809826C08E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22994BE7-CF95-40F5-9AF7-03AE55A7FBE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22994BE7-CF95-40F5-9AF7-03AE55A7FBE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22994BE7-CF95-40F5-9AF7-03AE55A7FBE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22994BE7-CF95-40F5-9AF7-03AE55A7FBE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
