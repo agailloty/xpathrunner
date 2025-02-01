@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using xpathrunnerui.ViewModels;
 
 namespace xpathrunnerui
 {
@@ -20,10 +21,7 @@ namespace xpathrunnerui
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 BindingPlugins.DataValidators.RemoveAt(0);
                 desktop.MainWindow = new MainWindow();
-            }
-            else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-            {
-                singleViewPlatform.MainView = new MainView();
+                desktop.MainWindow.DataContext = new MainWindowViewModel();
             }
 
             base.OnFrameworkInitializationCompleted();
