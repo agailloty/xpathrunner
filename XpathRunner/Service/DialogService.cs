@@ -19,11 +19,24 @@ public class DialogService
         var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions()
         {
             Title = "Open Text File",
-            AllowMultiple = false
+            AllowMultiple = true,
+            FileTypeFilter = AllowedFileTypes()
+            
         });
         fileList = files?.Select(file => file.TryGetLocalPath()).ToArray();
 
 
         return fileList;
+    }
+    
+    private static FilePickerFileType[] AllowedFileTypes()
+    {
+        return new[]
+        {
+            new FilePickerFileType("HTML or XML Files")
+            {
+                Patterns = new[] {"*.html", "*.htm", "*.xml"}
+            }
+        };
     }
 }
