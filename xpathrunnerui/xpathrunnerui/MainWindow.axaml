@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="xpathrunnerui.MainWindow"
-        Title="XPATH Runner" Width="750" Height="680"
+        Title="XPATH Runner"
 		Icon="/Assets/html_tag.png"
 		WindowStartupLocation="CenterScreen">
 
