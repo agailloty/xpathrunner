@@ -19,7 +19,7 @@ public class XpathService
             return content;
 
         foreach (var result in results)
-            content.Add(result.InnerText);
+            content.Add(result.InnerText.Trim());
         return content;
     }
 }
