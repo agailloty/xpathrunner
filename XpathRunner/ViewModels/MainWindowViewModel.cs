@@ -22,6 +22,7 @@ public class MainWindowViewModel : ObservableObject
     private bool _isXpathResultsEmpty;
     private int _xpathResultCount;
     private ObservableCollection<FileInfo>? _selectedFiles;
+    private string _selectedFileLabel;
 
     public MainWindowViewModel()
     {
@@ -61,6 +62,7 @@ public class MainWindowViewModel : ObservableObject
                 {
                     FilePath = file.FullName;
                 }
+                UpdateSelectedFilesLabel();
             }
         };
     }
@@ -118,6 +120,12 @@ public class MainWindowViewModel : ObservableObject
     }
     
     public ObservableCollection<FileInfo> FilesToProcess { get; } = new();
+    
+    public string SelectedFilesLabel
+    {
+        get => _selectedFileLabel;
+        set => SetProperty(ref _selectedFileLabel, value);
+    }
 
     #endregion
 
@@ -148,6 +156,12 @@ public class MainWindowViewModel : ObservableObject
             {
                 FilesToProcess.Add(new FileInfo(path));
             }
+            
+            if (FilesToProcess.Count > 0)
+            {
+                FilePath = FilesToProcess[0].FullName;
+            }
+            UpdateSelectedFilesLabel();
         }
     }
     
@@ -155,6 +169,18 @@ public class MainWindowViewModel : ObservableObject
     {
         if (file == null || !FilesToProcess.Contains(file)) return;
         FilesToProcess.Remove(file);
+    }
+
+    private void UpdateSelectedFilesLabel()
+    {
+        if (SelectedFiles.Count == 1)
+        {
+            SelectedFilesLabel = $"Selected file : {FilePath}";
+        }
+        else
+        {
+            SelectedFilesLabel = $"Number of selected files : {SelectedFiles.Count}";
+        }
     }
     #endregion
 }
