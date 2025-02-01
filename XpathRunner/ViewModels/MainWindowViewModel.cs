@@ -1,4 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,9 +18,10 @@ public class MainWindowViewModel : ObservableObject
     private readonly DialogService _dialogService = new();
     private string _filePath;
     private bool _isFileSelected;
-    private string _xpathExpression;
+    private string _xpathExpression ;
     private bool _isXpathResultsEmpty;
     private int _xpathResultCount;
+    private ObservableCollection<FileInfo>? _selectedFiles;
 
     public MainWindowViewModel()
     {
@@ -41,6 +48,21 @@ public class MainWindowViewModel : ObservableObject
             IsXpathResultsEmpty = XpathResultsCount == 0;
             IsBusy = false;
         });
+        
+        AddFilesFileCommand = new RelayCommand(async () => await AddFiles());
+        RemoveFileCommand = new RelayCommand<FileInfo>(RemoveFile);
+        
+        SelectedFiles = new ObservableCollection<FileInfo>();
+        SelectedFiles.CollectionChanged += (sender, args) =>
+        {
+            if (args.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (FileInfo file in args.NewItems)
+                {
+                    FilePath = file.FullName;
+                }
+            }
+        };
     }
 
     #region  Public properties
@@ -94,6 +116,8 @@ public class MainWindowViewModel : ObservableObject
         get => _xpathResultCount;
         set => SetProperty(ref _xpathResultCount, value);
     }
+    
+    public ObservableCollection<FileInfo> FilesToProcess { get; } = new();
 
     #endregion
 
@@ -101,6 +125,36 @@ public class MainWindowViewModel : ObservableObject
 
     public ICommand FilePickerCommand { get; }
     public ICommand GetXpathResultsCommand { get; }
+    public ICommand AddFilesFileCommand { get; }
+    public ICommand RemoveFileCommand { get; }
 
+    public ObservableCollection<FileInfo>? SelectedFiles
+    {
+        get => _selectedFiles;
+        set => SetProperty(ref _selectedFiles, value);
+    }
+
+    #endregion
+    
+    #region Private methods
+    private async Task AddFiles()
+    {
+        var paths = await _dialogService.ShowFolderBrowserDialogAsync();
+        foreach (string path in paths)
+        {
+            var fileInfo = new FileInfo(path);
+            bool isValidFile = fileInfo.Extension == ".html" || fileInfo.Extension == ".htm" || fileInfo.Extension == ".xml";
+            if (isValidFile && FilesToProcess.All(file => file.FullName != fileInfo.FullName))
+            {
+                FilesToProcess.Add(new FileInfo(path));
+            }
+        }
+    }
+    
+    private void RemoveFile(FileInfo? file)
+    {
+        if (file == null || !FilesToProcess.Contains(file)) return;
+        FilesToProcess.Remove(file);
+    }
     #endregion
 }

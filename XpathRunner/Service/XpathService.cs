@@ -7,6 +7,9 @@ public class XpathService
 {
     public IList<string> ExtractHtmlContent(string filepath, string xpath)
     {
+        if (string.IsNullOrEmpty(filepath) || string.IsNullOrEmpty(xpath))
+            return new List<string>();
+        
         var content = new List<string>();
         var doc = new HtmlDocument();
         doc.Load(filepath);
