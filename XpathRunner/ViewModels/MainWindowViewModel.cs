@@ -69,6 +69,14 @@ public class MainWindowViewModel : ObservableObject
                 UpdateSelectedFilesLabel();
             }
         };
+        
+        ExportResultsCommand = new RelayCommand(async () =>
+        {
+            IsBusy = true;
+            var content = XpathResults.ToArray();
+            await _dialogService.SaveResultsToCsvAsync(content);
+            IsBusy = false;
+        });
     }
 
     #region  Public properties
@@ -139,6 +147,7 @@ public class MainWindowViewModel : ObservableObject
     public ICommand GetXpathResultsCommand { get; }
     public ICommand AddFilesFileCommand { get; }
     public ICommand RemoveFileCommand { get; }
+    public ICommand ExportResultsCommand { get; }
 
     public ObservableCollection<FileInfo>? SelectedFiles
     {
