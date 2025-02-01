@@ -2,9 +2,9 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using xpathrunnerui.ViewModels;
+using XpathRunner.ViewModels;
 
-namespace xpathrunnerui
+namespace XpathRunner
 {
     public partial class App : Application
     {
@@ -20,7 +20,7 @@ namespace xpathrunnerui
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 BindingPlugins.DataValidators.RemoveAt(0);
-                desktop.MainWindow = new MainWindow();
+                desktop.MainWindow = new Views.MainWindow();
                 desktop.MainWindow.DataContext = new MainWindowViewModel();
             }
 

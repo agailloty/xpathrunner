@@ -1,18 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
-
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-
 using HtmlAgilityPack;
-using System.Runtime.InteropServices.JavaScript;
 
-namespace xpathrunnerui;
+namespace XpathRunner.Views;
 
 public partial class MainView : UserControl
 {

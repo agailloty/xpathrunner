@@ -2,7 +2,7 @@
 
 using Avalonia;
 
-namespace xpathrunnerui
+namespace XpathRunner
 {
     internal sealed class Program
     {

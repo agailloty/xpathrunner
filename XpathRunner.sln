@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xpathrunner", "xpathrunner\xpathrunner.csproj", "{1372129D-DB4D-45E7-9A27-559FDF99D37C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xpathrunnerui", "xpathrunnerui\xpathrunnerui\xpathrunnerui.csproj", "{4A6A3B53-39EB-4EC3-A721-86A90A7BC263}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XpathRunner", "xpathrunnerui\XpathRunner\XpathRunner.csproj", "{4A6A3B53-39EB-4EC3-A721-86A90A7BC263}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1372129D-DB4D-45E7-9A27-559FDF99D37C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A6A3B53-39EB-4EC3-A721-86A90A7BC263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A6A3B53-39EB-4EC3-A721-86A90A7BC263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A6A3B53-39EB-4EC3-A721-86A90A7BC263}.Release|Any CPU.ActiveCfg = Release|Any CPU

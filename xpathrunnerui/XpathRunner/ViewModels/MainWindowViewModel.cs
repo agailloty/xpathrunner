@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace xpathrunnerui.ViewModels;
+namespace XpathRunner.ViewModels;
 
 public class MainWindowViewModel : ObservableObject
 {

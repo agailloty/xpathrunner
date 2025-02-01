@@ -1,14 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
-using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Avalonia.Controls;
 
-namespace xpathrunnerui
+namespace XpathRunner.Views
 {
     public partial class MainWindow : Window
     {
