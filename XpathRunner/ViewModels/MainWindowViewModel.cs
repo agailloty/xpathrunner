@@ -13,9 +13,12 @@ public class MainWindowViewModel : ObservableObject
     private string _filePath;
     private bool _isFileSelected;
     private string _xpathExpression;
+    private bool _isXpathResultsEmpty;
+    private int _xpathResultCount;
 
     public MainWindowViewModel()
     {
+        IsXpathResultsEmpty = true;
         FilePickerCommand = new RelayCommand(async () =>
         {
             IsBusy = true;
@@ -34,11 +37,25 @@ public class MainWindowViewModel : ObservableObject
             {
                 XpathResults.Add(result);
             }
+            XpathResultsCount = XpathResults.Count;
+            IsXpathResultsEmpty = XpathResultsCount == 0;
             IsBusy = false;
         });
     }
 
-    #region  Public
+    #region  Public properties
+    
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            if (_isBusy != value)
+            {
+                SetProperty(ref _isBusy, value);
+            }
+        }
+    }
 
     public string FilePath
     {
@@ -66,24 +83,24 @@ public class MainWindowViewModel : ObservableObject
     
     public ObservableCollection<string> XpathResults { get; } = new();
 
+    public bool IsXpathResultsEmpty
+    {
+        get => _isXpathResultsEmpty;
+        set => SetProperty(ref _isXpathResultsEmpty, value);
+    }
+    
+    public int XpathResultsCount
+    {
+        get => _xpathResultCount;
+        set => SetProperty(ref _xpathResultCount, value);
+    }
+
     #endregion
 
-    #region  
+    #region  Commands
 
     public ICommand FilePickerCommand { get; }
     public ICommand GetXpathResultsCommand { get; }
 
     #endregion
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            if (_isBusy != value)
-            {
-                SetProperty(ref _isBusy, value);
-            }
-        }
-    }
 }
