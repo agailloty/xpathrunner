@@ -38,8 +38,4 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
 </Project>
