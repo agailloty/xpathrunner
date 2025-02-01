@@ -39,14 +39,18 @@ public class MainWindowViewModel : ObservableObject
         {
             IsBusy = true;
             var xpathService = new XpathService();
-            var results = xpathService.ExtractHtmlContent(FilePath, XpathExpression);
-            XpathResults.Clear();
-            foreach (var result in results)
+            var filePaths = SelectedFiles?.Select(file => file.FullName).ToArray();
+            if (filePaths != null)
             {
-                XpathResults.Add(result);
+                var results = xpathService.ExtractHtmlContent(filePaths, XpathExpression);
+                XpathResults.Clear();
+                foreach (var result in results)
+                {
+                    XpathResults.Add(result);
+                }
+                XpathResultsCount = XpathResults.Count;
+                IsXpathResultsEmpty = XpathResultsCount == 0;
             }
-            XpathResultsCount = XpathResults.Count;
-            IsXpathResultsEmpty = XpathResultsCount == 0;
             IsBusy = false;
         });
         
