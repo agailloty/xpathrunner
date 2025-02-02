@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using HtmlAgilityPack;
 
 namespace XpathRunner.Service;
@@ -43,4 +44,47 @@ public class XpathService
         }
         return content;
     }
+
+    public IList<List<string>> ExtractMultipleHtmlContent(string[] filepaths, string[] xpaths)
+    {
+        // keep only the paths and xpaths that are not empty
+        var paths = filepaths.Where(path => !string.IsNullOrEmpty(path)).ToArray();
+        var xpathsList = xpaths.Where(xpath => !string.IsNullOrEmpty(xpath)).ToArray();
+        
+        // if there are no paths or xpaths, return an empty list
+        if (paths.Length == 0 || xpathsList.Length == 0)
+            return new List<List<string>>();
+        
+        var results = new List<List<string>>();
+        
+        foreach (var filepath in paths)
+        {
+            var doc = new HtmlDocument();
+            doc.Load(filepath);
+            var content = EvaluateMultipleXpaths(doc, xpathsList);
+            results.AddRange(content);
+        }
+        return results;
+    }
+
+    public IList<List<string>> EvaluateMultipleXpaths(HtmlDocument doc, IEnumerable<string> xpaths)
+    {
+        var results = new List<List<string>>();
+        foreach (var xpath in xpaths)
+        {
+            var content = new List<string>();
+            var resultsNode = doc.DocumentNode.SelectNodes(xpath);
+            if (resultsNode == null)
+            {
+                results.Add(content);
+                continue;
+            }
+
+            foreach (var result in resultsNode)
+                content.Add(result.InnerText.Trim());
+            results.Add(content);
+        }
+        return results;
+    }
+
 }
