@@ -5,10 +5,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:XpathRunner.ViewModels"
              x:DataType="vm:MainWindowViewModel"
-             x:Class="XpathRunner.Views.XpathResults">
+             x:Class="XpathRunner.Views.XpathResults"
+             >
     <Border>
         <ScrollViewer>
-            <ListBox ItemsSource="{Binding XpathResults}" />
+            <DataGrid ItemsSource="{Binding DataGridProxy.Rows}" Name="ResultsDataGrid" IsReadOnly="True" AutoGenerateColumns="False" />
         </ScrollViewer>
     </Border>
 </UserControl>

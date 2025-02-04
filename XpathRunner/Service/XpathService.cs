@@ -6,46 +6,7 @@ namespace XpathRunner.Service;
 
 public class XpathService
 {
-    public IList<string> ExtractHtmlContent(string filepath, string xpath)
-    {
-        if (string.IsNullOrEmpty(filepath) || string.IsNullOrEmpty(xpath))
-            return new List<string>();
-        
-        var content = new List<string>();
-        var doc = new HtmlDocument();
-        doc.Load(filepath);
-
-        var results = doc.DocumentNode.SelectNodes(xpath);
-        if (results == null)
-            return content;
-
-        foreach (var result in results)
-            content.Add(result.InnerText.Trim());
-        return content;
-    }
-    
-    public IList<string> ExtractHtmlContent(string[] filepaths, string xpath)
-    {
-        if (filepaths == null || filepaths.Length == 0 || string.IsNullOrEmpty(xpath))
-            return new List<string>();
-        
-        var content = new List<string>();
-        foreach (var filepath in filepaths)
-        {
-            var doc = new HtmlDocument();
-            doc.Load(filepath);
-
-            var results = doc.DocumentNode.SelectNodes(xpath);
-            if (results == null)
-                continue;
-
-            foreach (var result in results)
-                content.Add(result.InnerText.Trim());
-        }
-        return content;
-    }
-
-    public IList<List<string>> ExtractMultipleHtmlContent(string[] filepaths, string[] xpaths)
+    public IList<ResultModel> ExtractMultipleHtmlContent(string[] filepaths, string[] xpaths)
     {
         // keep only the paths and xpaths that are not empty
         var paths = filepaths.Where(path => !string.IsNullOrEmpty(path)).ToArray();
@@ -53,9 +14,9 @@ public class XpathService
         
         // if there are no paths or xpaths, return an empty list
         if (paths.Length == 0 || xpathsList.Length == 0)
-            return new List<List<string>>();
+            return new List<ResultModel>();
         
-        var results = new List<List<string>>();
+        var results = new List<ResultModel>();
         
         foreach (var filepath in paths)
         {
@@ -64,15 +25,26 @@ public class XpathService
             var content = EvaluateMultipleXpaths(doc, xpathsList);
             results.AddRange(content);
         }
-        return results;
+        
+        // Get unique xpath expressions
+        var uniqueXpaths = results.Select(x => x.ColumnName).Distinct().ToList();
+        var uniqueResults = new List<ResultModel>();
+        foreach (var xpath in uniqueXpaths)
+        {
+            var rows = results.Where(r => r.ColumnName == xpath).SelectMany(r => r.Rows).ToList();
+            uniqueResults.Add(new ResultModel { ColumnName = xpath, Rows = rows });
+                
+        }
+        
+        return uniqueResults;
     }
 
-    public IList<List<string>> EvaluateMultipleXpaths(HtmlDocument doc, IEnumerable<string> xpaths)
+    public IList<ResultModel> EvaluateMultipleXpaths(HtmlDocument doc, IEnumerable<string> xpaths)
     {
-        var results = new List<List<string>>();
+        var results = new List<ResultModel>();
         foreach (var xpath in xpaths)
         {
-            var content = new List<string>();
+            var content = new ResultModel( ) { ColumnName = xpath };
             var resultsNode = doc.DocumentNode.SelectNodes(xpath);
             if (resultsNode == null)
             {
@@ -81,7 +53,7 @@ public class XpathService
             }
 
             foreach (var result in resultsNode)
-                content.Add(result.InnerText.Trim());
+                content.Rows.Add(result.InnerText.Trim());
             results.Add(content);
         }
         return results;

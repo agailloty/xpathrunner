@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using XpathRunner.Model;
 using XpathRunner.Service;
 
 namespace XpathRunner.ViewModels;
@@ -25,12 +27,16 @@ public class MainWindowViewModel : ObservableObject
     private string _selectedFileLabel;
     private ObservableCollection<XpathExpressionItem> _xpathExpressions;
     private readonly XpathService _xpathService;
+    private DataGridProxy _dataGridProxy;
 
     public MainWindowViewModel()
     {
         _xpathService = new XpathService();
         IsXpathResultsEmpty = true;
-        XpathExpressions = new ObservableCollection<XpathExpressionItem>();
+        XpathExpressions =
+        [
+            new XpathExpressionItem()
+        ];
         FilePickerCommand = new RelayCommand(async () =>
         {
             IsBusy = true;
@@ -61,7 +67,7 @@ public class MainWindowViewModel : ObservableObject
         {
             IsBusy = true;
             var content = XpathResults.ToList();
-            await _dialogService.SaveResultsToCsvAsync(content);
+            //await _dialogService.SaveResultsToCsvAsync(content);
             IsBusy = false;
         });
         
@@ -109,7 +115,8 @@ public class MainWindowViewModel : ObservableObject
         set => SetProperty(ref _xpathExpression, value);
     }
     
-    public ObservableCollection<List<string>> XpathResults { get; } = new();
+    public event PropertyChangedEventHandler? ResultsChanged;
+    public ObservableCollection<ResultModel> XpathResults { get; } = new();
 
     public bool IsXpathResultsEmpty
     {
@@ -129,6 +136,12 @@ public class MainWindowViewModel : ObservableObject
     {
         get => _selectedFileLabel;
         set => SetProperty(ref _selectedFileLabel, value);
+    }
+
+    public DataGridProxy DataGridProxy
+    {
+        get => _dataGridProxy;
+        set => SetProperty(ref _dataGridProxy, value);
     }
 
     #endregion
@@ -214,7 +227,11 @@ public class MainWindowViewModel : ObservableObject
             XpathResultsCount = XpathResults.Count;
             IsXpathResultsEmpty = XpathResultsCount == 0;
         }
+        DataGridProxy = new DataGridProxy(XpathResults);
+        ResultsChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(XpathResults)));
         IsBusy = false;
     }
+    
+    
     #endregion
 }
