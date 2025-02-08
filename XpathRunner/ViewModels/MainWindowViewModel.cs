@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,10 +24,17 @@ public class MainWindowViewModel : ObservableObject
     private int _xpathResultCount;
     private ObservableCollection<FileInfo>? _selectedFiles;
     private string _selectedFileLabel;
+    private ObservableCollection<XpathExpressionItem> _xpathExpressions;
+    private readonly XpathService _xpathService;
 
     public MainWindowViewModel()
     {
+        _xpathService = new XpathService();
         IsXpathResultsEmpty = true;
+        XpathExpressions =
+        [
+            new XpathExpressionItem()
+        ];
         FilePickerCommand = new RelayCommand(async () =>
         {
             IsBusy = true;
@@ -35,24 +43,7 @@ public class MainWindowViewModel : ObservableObject
             IsBusy = false;
         });
         
-        GetXpathResultsCommand = new RelayCommand(() =>
-        {
-            IsBusy = true;
-            var xpathService = new XpathService();
-            var filePaths = SelectedFiles?.Select(file => file.FullName).ToArray();
-            if (filePaths != null)
-            {
-                var results = xpathService.ExtractHtmlContent(filePaths, XpathExpression);
-                XpathResults.Clear();
-                foreach (var result in results)
-                {
-                    XpathResults.Add(result);
-                }
-                XpathResultsCount = XpathResults.Count;
-                IsXpathResultsEmpty = XpathResultsCount == 0;
-            }
-            IsBusy = false;
-        });
+        GetXpathResultsCommand = new RelayCommand(GetXpathResults);
         
         AddFilesFileCommand = new RelayCommand(async () => await AddFiles());
         RemoveFileCommand = new RelayCommand<FileInfo>(RemoveFile);
@@ -73,9 +64,14 @@ public class MainWindowViewModel : ObservableObject
         ExportResultsCommand = new RelayCommand(async () =>
         {
             IsBusy = true;
-            var content = XpathResults.ToArray();
-            await _dialogService.SaveResultsToCsvAsync(content);
+            var content = XpathResults.ToList();
+            //await _dialogService.SaveResultsToCsvAsync(content);
             IsBusy = false;
+        });
+        
+        AddXpathCommand = new RelayCommand(() =>
+        {
+                XpathExpressions.Add(new XpathExpressionItem());
         });
     }
 
@@ -117,7 +113,8 @@ public class MainWindowViewModel : ObservableObject
         set => SetProperty(ref _xpathExpression, value);
     }
     
-    public ObservableCollection<string> XpathResults { get; } = new();
+    public event PropertyChangedEventHandler? ResultsChanged;
+    public ObservableCollection<ResultModel> XpathResults { get; } = new();
 
     public bool IsXpathResultsEmpty
     {
@@ -148,12 +145,21 @@ public class MainWindowViewModel : ObservableObject
     public ICommand AddFilesFileCommand { get; }
     public ICommand RemoveFileCommand { get; }
     public ICommand ExportResultsCommand { get; }
+    
+    public ICommand AddXpathCommand { get; }
 
     public ObservableCollection<FileInfo>? SelectedFiles
     {
         get => _selectedFiles;
         set => SetProperty(ref _selectedFiles, value);
     }
+
+    public ObservableCollection<XpathExpressionItem> XpathExpressions
+    {
+        get => _xpathExpressions;
+        set => SetProperty(ref _xpathExpressions, value);
+    }
+    
 
     #endregion
     
@@ -186,7 +192,7 @@ public class MainWindowViewModel : ObservableObject
 
     private void UpdateSelectedFilesLabel()
     {
-        if (SelectedFiles.Count == 1)
+        if (SelectedFiles?.Count == 1)
         {
             SelectedFilesLabel = $"Selected file : {FilePath}";
         }
@@ -195,5 +201,28 @@ public class MainWindowViewModel : ObservableObject
             SelectedFilesLabel = $"Number of selected files : {SelectedFiles.Count}";
         }
     }
+    
+    private void GetXpathResults()
+    {
+        IsBusy = true;
+        var filePaths = SelectedFiles?.Select(file => file.FullName).ToArray();
+        if (filePaths != null)
+        {
+            var nonEmptyXpaths = XpathExpressions.Where(expression => !string.IsNullOrEmpty(expression.XpathExpression))
+                .Select(x => x.XpathExpression).ToArray();
+            var results = _xpathService.ExtractMultipleHtmlContent(filePaths, nonEmptyXpaths);
+            XpathResults.Clear();
+            foreach (var result in results)
+            {
+                XpathResults.Add(result);
+            }
+
+            XpathResultsCount = XpathResults
+                .Select(x => x.Rows.Count).Sum();
+            IsXpathResultsEmpty = XpathResultsCount == 0;
+        }
+        IsBusy = false;
+    }
+    
     #endregion
 }

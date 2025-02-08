@@ -4,11 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:XpathRunner.ViewModels"
+             xmlns:xpathRunner="clr-namespace:XpathRunner"
              x:DataType="vm:MainWindowViewModel"
-             x:Class="XpathRunner.Views.XpathResults">
+             x:Class="XpathRunner.Views.XpathResults"
+             >
     <Border>
-        <ScrollViewer>
-            <ListBox ItemsSource="{Binding XpathResults}" />
+        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding XpathResults}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Expander MinWidth="100" BorderBrush="Transparent" Background="Transparent" IsExpanded="True" Header="{Binding ColumnName}">
+                                <StackPanel>
+                                    <StackPanel Margin="0 10 10 10" Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding ColumnName}" />
+                                        <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Rows.Count, StringFormat=' (Count : {0} )'}" />
+                                    </StackPanel>
+                                    <ListBox Background="Transparent" ItemsSource="{Binding Rows}" />
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </Border>
 </UserControl>

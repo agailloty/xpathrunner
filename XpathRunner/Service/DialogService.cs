@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -30,10 +32,16 @@ public class DialogService
         return fileList;
     }
     
-    public async Task SaveResultsToCsvAsync(string[] content)
+    public async Task SaveResultsToCsvAsync(IEnumerable<IList<string>> content)
     {
-        var result = string.Join(Environment.NewLine, content);
-        await ExportFile(result);
+        StringBuilder lines = new();
+        foreach (var line in content)
+        {
+            var result = string.Join(",", line);
+            lines.AppendLine(result);
+        }
+        
+        await ExportFile(lines.ToString());
     }
     
     private async Task ExportFile(string content)
