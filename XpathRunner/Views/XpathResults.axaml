@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="using:XpathRunner.ViewModels"
+             xmlns:xpathRunner="clr-namespace:XpathRunner"
              x:DataType="vm:MainWindowViewModel"
              x:Class="XpathRunner.Views.XpathResults"
              >
@@ -12,12 +13,16 @@
             <ItemsControl ItemsSource="{Binding XpathResults}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <StackPanel Margin="0 10 10 10" Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding ColumnName}" />
-                                <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Rows.Count, StringFormat=' (Count : {0} )'}" />
-                            </StackPanel>
-                            <ItemsControl ItemsSource="{Binding Rows}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Expander IsExpanded="True" Header="{Binding ColumnName}">
+                                <StackPanel>
+                                    <StackPanel Margin="0 10 10 10" Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding ColumnName}" />
+                                        <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Rows.Count, StringFormat=' (Count : {0} )'}" />
+                                    </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Rows}" />
+                                </StackPanel>
+                            </Expander>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
