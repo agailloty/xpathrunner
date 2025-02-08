@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using XpathRunner.Model;
 using XpathRunner.Service;
 
 namespace XpathRunner.ViewModels;
@@ -27,7 +26,6 @@ public class MainWindowViewModel : ObservableObject
     private string _selectedFileLabel;
     private ObservableCollection<XpathExpressionItem> _xpathExpressions;
     private readonly XpathService _xpathService;
-    private DataGridProxy _dataGridProxy;
 
     public MainWindowViewModel()
     {
@@ -136,12 +134,6 @@ public class MainWindowViewModel : ObservableObject
     {
         get => _selectedFileLabel;
         set => SetProperty(ref _selectedFileLabel, value);
-    }
-
-    public DataGridProxy DataGridProxy
-    {
-        get => _dataGridProxy;
-        set => SetProperty(ref _dataGridProxy, value);
     }
 
     #endregion
