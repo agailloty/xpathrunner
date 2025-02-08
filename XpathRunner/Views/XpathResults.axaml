@@ -14,13 +14,13 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Expander IsExpanded="True" Header="{Binding ColumnName}">
+                            <Expander MinWidth="100" BorderBrush="Transparent" Background="Transparent" IsExpanded="True" Header="{Binding ColumnName}">
                                 <StackPanel>
                                     <StackPanel Margin="0 10 10 10" Orientation="Horizontal">
                                         <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding ColumnName}" />
                                         <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Rows.Count, StringFormat=' (Count : {0} )'}" />
                                     </StackPanel>
-                                    <ItemsControl ItemsSource="{Binding Rows}" />
+                                    <ListBox Background="Transparent" ItemsSource="{Binding Rows}" />
                                 </StackPanel>
                             </Expander>
                         </StackPanel>
