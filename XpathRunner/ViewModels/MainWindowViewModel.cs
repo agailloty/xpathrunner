@@ -200,7 +200,7 @@ public class MainWindowViewModel : ObservableObject
 
     private void UpdateSelectedFilesLabel()
     {
-        if (SelectedFiles.Count == 1)
+        if (SelectedFiles?.Count == 1)
         {
             SelectedFilesLabel = $"Selected file : {FilePath}";
         }
@@ -224,14 +224,13 @@ public class MainWindowViewModel : ObservableObject
             {
                 XpathResults.Add(result);
             }
-            XpathResultsCount = XpathResults.Count;
+
+            XpathResultsCount = XpathResults
+                .Select(x => x.Rows.Count).Sum();
             IsXpathResultsEmpty = XpathResultsCount == 0;
         }
-        DataGridProxy = new DataGridProxy(XpathResults);
-        ResultsChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(XpathResults)));
         IsBusy = false;
     }
-    
     
     #endregion
 }
