@@ -20,7 +20,7 @@ public class MainWindowViewModel : ObservableObject
     private string _xpathExpression = string.Empty;
     private bool _isXpathResultsEmpty;
     private int _xpathResultCount;
-    private ObservableCollection<FileInfo>? _selectedFiles;
+    private ObservableCollection<FileInfo> _selectedFiles;
     private string _selectedFileLabel = string.Empty;
     private ObservableCollection<XpathExpressionItem> _xpathExpressions = new();
     private readonly XpathService _xpathService;
@@ -32,6 +32,7 @@ public class MainWindowViewModel : ObservableObject
     {
         _exportService = new ExportService();
         _xpathService = new XpathService();
+        _selectedFiles = new ObservableCollection<FileInfo>();
         IsXpathResultsEmpty = true;
         XpathExpressions =
         [
@@ -44,16 +45,8 @@ public class MainWindowViewModel : ObservableObject
         AddFilesFileCommand = new AsyncRelayCommand(AddFiles);
         RemoveFileCommand = new RelayCommand<FileInfo>(RemoveFile);
         
-        SelectedFiles = new ObservableCollection<FileInfo>();
         SelectedFiles.CollectionChanged += (sender, args) =>
         {
-            if (args.Action != NotifyCollectionChangedAction.Add) return;
-            if (args.NewItems != null)
-                foreach (FileInfo file in args.NewItems)
-                {
-                    FilePath = file.FullName;
-                }
-
             UpdateSelectedFilesLabel();
         };
         
@@ -137,7 +130,7 @@ public class MainWindowViewModel : ObservableObject
     
     public ICommand AddXpathCommand { get; }
 
-    public ObservableCollection<FileInfo>? SelectedFiles
+    public ObservableCollection<FileInfo> SelectedFiles
     {
         get => _selectedFiles;
         set => SetProperty(ref _selectedFiles, value);
@@ -170,6 +163,12 @@ public class MainWindowViewModel : ObservableObject
             {
                 FilePath = FilesToProcess[0].FullName;
             }
+
+            foreach (var file in FilesToProcess)
+            {
+                if (SelectedFiles.Contains(file)) continue;
+                SelectedFiles.Add(file);
+            }
             UpdateSelectedFilesLabel();
         }
     }
@@ -182,7 +181,7 @@ public class MainWindowViewModel : ObservableObject
 
     private void UpdateSelectedFilesLabel()
     {
-        if (SelectedFiles == null || SelectedFiles.Count == 0)
+        if (SelectedFiles.Count == 0)
         {
             SelectedFilesLabel = "No files selected";
         }
