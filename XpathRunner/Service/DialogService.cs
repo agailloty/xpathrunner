@@ -33,7 +33,7 @@ public class DialogService
     }
     
     
-    public async Task ExportCSVFile(string content)
+    public async Task ExportCSVFile(IList<string> content)
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime
             {
@@ -54,7 +54,10 @@ public class DialogService
         {
             await using var stream = await file.OpenWriteAsync();
             await using var writer = new StreamWriter(stream, Encoding.UTF8);
-            await writer.WriteAsync(content);
+            foreach (var line in content)
+            {
+                await writer.WriteLineAsync(line);
+            }
         }
     }
     
