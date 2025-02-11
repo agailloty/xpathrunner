@@ -78,9 +78,8 @@
 		
 		<views:XpathResults Margin="10 0 0 0" Grid.Row="1" Grid.Column="1" IsVisible="{Binding !IsXpathResultsEmpty}"/>
 		<StackPanel Grid.Row="2" Grid.Column="1" IsVisible="{Binding !IsXpathResultsEmpty}" HorizontalAlignment="Right" Orientation="Horizontal">
-			<Button Grid.Row="2" Content="Export as CSV" ClickMode="Press" HorizontalAlignment="Left" Margin="-10 2 0 0" Command="{Binding ExportResultsCommand}"/>
-			<Label Grid.Row="2" Content="Total : " FontSize="15"/>
-			<Label Grid.Row="2" Content="{Binding XpathResultsCount}" FontSize="15"/>
+			<Button Grid.Row="2" Content="Export as CSV" ClickMode="Press" HorizontalAlignment="Left" Margin="-10 0 0 0" Command="{Binding ExportResultsCommand}"/>
+			<Label VerticalAlignment="Center" Grid.Row="2" Content="{Binding XpathResultsCount, StringFormat='Total : {0}'}" FontSize="15" FontWeight="Bold"/>
 		</StackPanel>
 		
 	</Grid>

@@ -32,19 +32,8 @@ public class DialogService
         return fileList;
     }
     
-    public async Task SaveResultsToCsvAsync(IEnumerable<IList<string>> content)
-    {
-        StringBuilder lines = new();
-        foreach (var line in content)
-        {
-            var result = string.Join(",", line);
-            lines.AppendLine(result);
-        }
-        
-        await ExportFile(lines.ToString());
-    }
     
-    private async Task ExportFile(string content)
+    public async Task ExportCSVFile(IList<string> content)
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime
             {
@@ -54,8 +43,8 @@ public class DialogService
         var options = new FilePickerSaveOptions
         {
             Title = "Save File",
-            SuggestedFileName = "NewFile.txt",
-            DefaultExtension = "txt",
+            SuggestedFileName = "export.csv",
+            DefaultExtension = "csv",
             ShowOverwritePrompt = true
         };
 
@@ -64,8 +53,11 @@ public class DialogService
         if (file != null)
         {
             await using var stream = await file.OpenWriteAsync();
-            await using var writer = new StreamWriter(stream);
-            await writer.WriteAsync(content);
+            await using var writer = new StreamWriter(stream, Encoding.UTF8);
+            foreach (var line in content)
+            {
+                await writer.WriteLineAsync(line);
+            }
         }
     }
     

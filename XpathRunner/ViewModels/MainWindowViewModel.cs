@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,59 +12,45 @@ namespace XpathRunner.ViewModels;
 
 public class MainWindowViewModel : ObservableObject
 {
+    #region Private members
     private bool _isBusy;
     private readonly DialogService _dialogService = new();
-    private string _filePath;
+    private string _filePath = string.Empty;
     private bool _isFileSelected;
-    private string _xpathExpression ;
+    private string _xpathExpression = string.Empty;
     private bool _isXpathResultsEmpty;
     private int _xpathResultCount;
-    private ObservableCollection<FileInfo>? _selectedFiles;
-    private string _selectedFileLabel;
-    private ObservableCollection<XpathExpressionItem> _xpathExpressions;
+    private ObservableCollection<FileInfo> _selectedFiles;
+    private string _selectedFileLabel = string.Empty;
+    private ObservableCollection<XpathExpressionItem> _xpathExpressions = new();
     private readonly XpathService _xpathService;
+    private readonly ExportService _exportService;
+
+    #endregion
 
     public MainWindowViewModel()
     {
+        _exportService = new ExportService();
         _xpathService = new XpathService();
+        _selectedFiles = new ObservableCollection<FileInfo>();
         IsXpathResultsEmpty = true;
         XpathExpressions =
         [
             new XpathExpressionItem()
         ];
-        FilePickerCommand = new RelayCommand(async () =>
-        {
-            IsBusy = true;
-            var files = await _dialogService.ShowFolderBrowserDialogAsync();
-            FilePath = files?[0];
-            IsBusy = false;
-        });
+        FilePickerCommand = new AsyncRelayCommand(PickFiles);
         
         GetXpathResultsCommand = new RelayCommand(GetXpathResults);
         
-        AddFilesFileCommand = new RelayCommand(async () => await AddFiles());
+        AddFilesFileCommand = new AsyncRelayCommand(AddFiles);
         RemoveFileCommand = new RelayCommand<FileInfo>(RemoveFile);
         
-        SelectedFiles = new ObservableCollection<FileInfo>();
         SelectedFiles.CollectionChanged += (sender, args) =>
         {
-            if (args.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (FileInfo file in args.NewItems)
-                {
-                    FilePath = file.FullName;
-                }
-                UpdateSelectedFilesLabel();
-            }
+            UpdateSelectedFilesLabel();
         };
         
-        ExportResultsCommand = new RelayCommand(async () =>
-        {
-            IsBusy = true;
-            var content = XpathResults.ToList();
-            //await _dialogService.SaveResultsToCsvAsync(content);
-            IsBusy = false;
-        });
+        ExportResultsCommand = new AsyncRelayCommand(ExportCsv);
         
         AddXpathCommand = new RelayCommand(() =>
         {
@@ -113,7 +96,6 @@ public class MainWindowViewModel : ObservableObject
         set => SetProperty(ref _xpathExpression, value);
     }
     
-    public event PropertyChangedEventHandler? ResultsChanged;
     public ObservableCollection<ResultModel> XpathResults { get; } = new();
 
     public bool IsXpathResultsEmpty
@@ -148,7 +130,7 @@ public class MainWindowViewModel : ObservableObject
     
     public ICommand AddXpathCommand { get; }
 
-    public ObservableCollection<FileInfo>? SelectedFiles
+    public ObservableCollection<FileInfo> SelectedFiles
     {
         get => _selectedFiles;
         set => SetProperty(ref _selectedFiles, value);
@@ -167,6 +149,7 @@ public class MainWindowViewModel : ObservableObject
     private async Task AddFiles()
     {
         var paths = await _dialogService.ShowFolderBrowserDialogAsync();
+        if (paths == null) return;
         foreach (string path in paths)
         {
             var fileInfo = new FileInfo(path);
@@ -180,6 +163,12 @@ public class MainWindowViewModel : ObservableObject
             {
                 FilePath = FilesToProcess[0].FullName;
             }
+
+            foreach (var file in FilesToProcess)
+            {
+                if (SelectedFiles.Contains(file)) continue;
+                SelectedFiles.Add(file);
+            }
             UpdateSelectedFilesLabel();
         }
     }
@@ -192,7 +181,11 @@ public class MainWindowViewModel : ObservableObject
 
     private void UpdateSelectedFilesLabel()
     {
-        if (SelectedFiles?.Count == 1)
+        if (SelectedFiles.Count == 0)
+        {
+            SelectedFilesLabel = "No files selected";
+        }
+        else if (SelectedFiles.Count == 1)
         {
             SelectedFilesLabel = $"Selected file : {FilePath}";
         }
@@ -223,6 +216,24 @@ public class MainWindowViewModel : ObservableObject
         }
         IsBusy = false;
     }
+
+    private async Task PickFiles()
+    {
+            IsBusy = true;
+            var files = await _dialogService.ShowFolderBrowserDialogAsync();
+            if (files != null)
+            {
+                FilePath = files[0];
+            }
+            IsBusy = false;
+    }
     
+    private async Task ExportCsv()
+    {
+        IsBusy = true;
+        var content = XpathResults.ToList();
+        await _exportService.SaveResultsToCsvAsync(content);
+        IsBusy = false;
+    }
     #endregion
 }
