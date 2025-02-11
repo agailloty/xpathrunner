@@ -37,7 +37,11 @@ public class ExportService
                     line.Append(",");
                     continue;
                 }
-                line.Append($"\"{results[j].Rows[i]}\",");
+                line.Append($"\"{results[j].Rows[i]}\"");
+                if (j < nColumns - 1)
+                {
+                    line.Append(",");
+                }
             }
             resultList.Add(line.ToString());
         }
