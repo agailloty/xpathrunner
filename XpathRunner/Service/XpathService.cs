@@ -44,19 +44,27 @@ public class XpathService
         var results = new List<ResultModel>();
         foreach (var xpath in xpaths)
         {
-            var content = new ResultModel( ) { ColumnName = xpath };
-            var resultsNode = doc.DocumentNode.SelectNodes(xpath);
-            if (resultsNode == null)
+            var content = new ResultModel() { ColumnName = xpath };
+            try
+            {
+                var resultsNode = doc.DocumentNode.SelectNodes(xpath);
+                if (resultsNode == null)
+                {
+                    results.Add(content);
+                    continue;
+                }
+
+                foreach (var result in resultsNode)
+                    content.Rows.Add(result.InnerText.Trim());
+                results.Add(content);
+            }
+            catch
             {
                 results.Add(content);
-                continue;
             }
 
-            foreach (var result in resultsNode)
-                content.Rows.Add(result.InnerText.Trim());
-            results.Add(content);
         }
+        
         return results;
     }
-
 }
