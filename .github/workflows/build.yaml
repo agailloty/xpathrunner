@@ -28,7 +28,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet publish -c Release --self-contained -p:PublishTrimmed=true -o ./publish
+      run: dotnet publish -c Release --self-contained -p:PublishTrimmed=true -p:DebugType=None -o ./publish
 
     - name: Archive build (Ubuntu)
       if: matrix.os == 'ubuntu-latest'
