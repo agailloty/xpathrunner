@@ -56,7 +56,10 @@ public class MainWindowViewModel : ObservableObject
         {
                 XpathExpressions.Add(new XpathExpressionItem());
         });
+
+        RemoveXpathCommand = new RelayCommand<XpathExpressionItem>(RemoveXpath, CanRemoveXpath);
     }
+    
 
     #region  Public properties
     
@@ -142,6 +145,7 @@ public class MainWindowViewModel : ObservableObject
         set => SetProperty(ref _xpathExpressions, value);
     }
     
+    public ICommand RemoveXpathCommand { get; }
 
     #endregion
     
@@ -235,5 +239,19 @@ public class MainWindowViewModel : ObservableObject
         await _exportService.SaveResultsToCsvAsync(content);
         IsBusy = false;
     }
+
+    private void RemoveXpath(XpathExpressionItem item)
+    {
+        if (XpathExpressions.Count > 1 && XpathExpressions.Contains(item))
+        {
+            XpathExpressions.Remove(item);
+        }
+    }
+    
+    private bool CanRemoveXpath(XpathExpressionItem item)
+    {
+        return XpathExpressions.Count > 1 && XpathExpressions.Contains(item);
+    }
+    
     #endregion
 }

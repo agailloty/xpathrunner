@@ -4,7 +4,7 @@ namespace XpathRunner.ViewModels;
 
 public class XpathExpressionItem : ObservableObject
 {
-    private string _xpathExpression;
+    private string _xpathExpression = string.Empty;
 
     public string XpathExpression
     {

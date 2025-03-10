@@ -65,7 +65,14 @@
 					<ItemsControl  ItemsSource="{Binding XpathExpressions}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBox Margin="2" Text="{Binding XpathExpression, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontSize="15" MaxHeight="100"/>
+								<TextBox Margin="2" Text="{Binding XpathExpression, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontSize="15" MaxHeight="100">
+									<TextBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Delete" Command="{Binding ViewModel.RemoveXpathCommand, ElementName=mainView}"
+                                            CommandParameter="{Binding}" />
+                                        </ContextMenu>
+                                    </TextBox.ContextMenu>
+								</TextBox>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
