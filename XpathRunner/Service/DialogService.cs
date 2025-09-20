@@ -26,7 +26,11 @@ public class DialogService
             FileTypeFilter = AllowedFileTypes()
             
         });
-        fileList = files?.Select(file => file.TryGetLocalPath()).ToArray();
+        fileList = files?
+            .Select(file => file.TryGetLocalPath())
+            .Where(path => path != null)
+            .Cast<string>()
+            .ToArray();
 
 
         return fileList;

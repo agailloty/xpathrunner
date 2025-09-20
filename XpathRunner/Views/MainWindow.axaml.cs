@@ -4,7 +4,6 @@ namespace XpathRunner.Views
 {
     public partial class MainWindow : Window
     {
-        private string? _filepath;
         public MainWindow()
         {
             InitializeComponent();

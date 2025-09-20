@@ -21,5 +21,5 @@ public partial class MainView : UserControl
         InitializeComponent();
     }
     
-    public MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
+    public MainWindowViewModel? ViewModel => DataContext as MainWindowViewModel;
 }
